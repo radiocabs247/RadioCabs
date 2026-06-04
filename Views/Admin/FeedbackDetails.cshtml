@@ -1,0 +1,20 @@
+@model Radiocab.Models.Feedback
+@{
+    ViewData["Title"] = "Feedback Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">Feedback Details</h5>
+        <dl class="row">
+            <dt class="col-sm-3">Name</dt><dd class="col-sm-9">@Model.Name</dd>
+            <dt class="col-sm-3">Email</dt><dd class="col-sm-9">@Model.Email</dd>
+            <dt class="col-sm-3">Mobile</dt><dd class="col-sm-9">@Model.MobileNo</dd>
+            <dt class="col-sm-3">City</dt><dd class="col-sm-9">@Model.City</dd>
+            <dt class="col-sm-3">Type</dt><dd class="col-sm-9">@Model.Type</dd>
+            <dt class="col-sm-3">Description</dt><dd class="col-sm-9">@Model.Description</dd>
+        </dl>
+        <a asp-action="Feedbacks" class="btn btn-secondary btn-sm">Back</a>
+    </div>
+</div>

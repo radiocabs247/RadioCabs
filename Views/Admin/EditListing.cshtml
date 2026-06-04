@@ -1,0 +1,57 @@
+@model Radiocab.Models.Listing
+@{
+    ViewData["Title"] = "Edit Listing";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">Edit Listing</h5>
+        <form asp-action="EditListing" method="post" class="row g-3">
+            <input asp-for="ListingId" type="hidden" />
+            <input asp-for="ImagePath" type="hidden" />
+            <input asp-for="CompanyId" type="hidden" />
+            <div class="col-md-6">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="CompanyCode" class="form-label"></label>
+                <input asp-for="CompanyCode" class="form-control" />
+                <span asp-validation-for="CompanyCode" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="City" class="form-label"></label>
+                <input asp-for="City" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Mobile" class="form-label"></label>
+                <input asp-for="Mobile" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label asp-for="PaymentStatus" class="form-label"></label>
+                <select asp-for="PaymentStatus" class="form-select">
+                    <option>Pending</option>
+                    <option>Paid</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Listings" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

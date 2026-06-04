@@ -1,0 +1,17 @@
+@model Radiocab.Models.Feedback
+@{
+    ViewData["Title"] = "Delete Feedback";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card border-danger">
+    <div class="card-body">
+        <h5 class="text-danger">Delete Feedback Confirmation</h5>
+        <p>Are you sure you want to delete feedback from <strong>@Model.Name</strong>?</p>
+        <form asp-action="DeleteFeedback" method="post">
+            <input type="hidden" asp-for="FeedbackId" name="id" />
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a asp-action="Feedbacks" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

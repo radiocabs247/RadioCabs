@@ -1,0 +1,44 @@
+﻿
+@model List<Radiocab.Models.Listing>
+@{
+    ViewData["Title"] = "Companylist";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="header">
+    <h1>Registered Companies</h1>
+    <p>View and manage all registered transportation companies</p>
+</div>
+
+<div class="content-section">
+    <h2>Company List</h2>
+
+    <div class="company-cards">
+        @if (Model.Any())
+        {
+            foreach (var company in Model)
+            {
+                <div class="company-card">
+                    <div class="company-logo">
+                        <img src="@(string.IsNullOrWhiteSpace(company.ImagePath) ? "https://via.placeholder.com/120x120.png?text=Logo" : company.ImagePath)" alt="Company Logo" />
+                    </div>
+                    <div class="company-details">
+                        <h3>@company.Name</h3>
+                        <p><strong>Company ID:</strong> @company.CompanyCode</p>
+                        <p><strong>Email:</strong> @company.Email</p>
+                        <p><strong>Phone:</strong> @company.Mobile</p>
+                        <p><strong>Membership:</strong> @company.MembershipType</p>
+                        <p><strong>Payment:</strong> @company.PaymentType - $@company.PaymentAmount (@company.PaymentStatus)</p>
+                        <p class="company-desc">@company.Description</p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No registered companies available.</p>
+        }
+    </div>
+</div>
+
+

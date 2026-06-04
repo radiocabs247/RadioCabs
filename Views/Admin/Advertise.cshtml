@@ -1,0 +1,81 @@
+﻿@model List<Radiocab.Models.Advertise>
+
+@{
+    ViewData["Title"] = "Advertisements";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-3">
+    <h2>Advertisement Requests</h2>
+
+    <table class="table table-bordered table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Email</th>
+                <th>City</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Email</td>
+                    <td>@item.City</td>
+                    <td>
+                        <span class="badge bg-warning text-dark">
+                            @item.Status
+                        </span>
+                    </td>
+
+                    <td>
+
+                        @if (item.Status == "Pending")
+                        {
+                            <!-- APPROVE -->
+                            <form asp-action="ApproveAdvertisement"
+                                  asp-controller="Admin"
+                                  method="post"
+                                  class="d-inline">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden" name="id" value="@item.AdvertiseId" />
+
+                                <button type="submit"
+                                        class="btn btn-success btn-sm">
+                                    Approve
+                                </button>
+                            </form>
+
+                            <!-- REJECT -->
+                            <form asp-action="RejectAdvertisement"
+                                  asp-controller="Admin"
+                                  method="post"
+                                  class="d-inline">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden" name="id" value="@item.AdvertiseId" />
+
+                                <button type="submit"
+                                        class="btn btn-danger btn-sm">
+                                    Reject
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-muted">@item.Status</span>
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

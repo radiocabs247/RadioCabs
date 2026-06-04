@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewData["Title"] = "AddDriver";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="header">
+    <h1>Add New Driver</h1>
+    <p>Register a new driver in the Radio Cab transportation system</p>
+</div>
+
+<div class="content-section">
+    <h2>Driver Registration Form</h2>
+
+    <form class="driver-form">
+        <div class="form-group">
+            <label for="driverName">Driver Name</label>
+            <input type="text" id="driverName" placeholder="Enter driver's full name" required />
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="Enter email address" required />
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="Enter contact number" required />
+        </div>
+
+        <div class="form-group">
+            <label for="license">License Number</label>
+            <input type="text" id="license" placeholder="Enter license number" required />
+        </div>
+
+        <div class="form-group">
+            <label for="vehicle">Vehicle Type</label>
+            <select id="vehicle" required>
+                <option value="">Select Vehicle Type</option>
+                <option value="sedan">Sedan</option>
+                <option value="suv">SUV</option>
+                <option value="van">Van</option>
+                <option value="truck">Truck</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="experience">Experience (Years)</label>
+            <input type="number" id="experience" min="0" max="40" placeholder="e.g., 5" required />
+        </div>
+
+        <div class="form-group">
+            <label for="photo">Driver Photo</label>
+            <input type="file" id="photo" accept="image/*" required />
+        </div>
+
+        <div class="form-group" style="grid-column: span 2;">
+            <label for="address">Address</label>
+            <textarea id="address" rows="3" placeholder="Enter driver's address"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Add Driver</button>
+    </form>
+</div>
+
+

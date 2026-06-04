@@ -1,0 +1,41 @@
+﻿
+@model List<Radiocab.Models.Driver>
+@{
+    ViewData["Title"] = "Driverlist";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="header">
+    <h1>Driver List</h1>
+    <p>View and manage all registered drivers in the Radio Cab system</p>
+</div>
+
+<div class="content-section">
+    <h2>Registered Drivers</h2>
+
+    <div class="driver-list">
+        @if (Model.Any())
+        {
+            foreach (var driver in Model)
+            {
+                <div class="driver-card">
+                    <div class="driver-info">
+                        <h3>@driver.Name</h3>
+                        <p><strong>Driver ID:</strong> @driver.DriverCode</p>
+                        <p><strong>Email:</strong> @driver.Email</p>
+                        <p><strong>Phone:</strong> @driver.Mobile</p>
+                        <p><strong>Experience:</strong> @driver.Experience years</p>
+                        <p><strong>Address:</strong> @driver.Address</p>
+                        <p><strong>Payment:</strong> @driver.PaymentType - $@driver.PaymentAmount (@driver.PaymentStatus)</p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No registered drivers available.</p>
+        }
+    </div>
+</div>
+
+

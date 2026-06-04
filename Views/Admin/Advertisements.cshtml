@@ -1,0 +1,42 @@
+@model List<Radiocab.Models.Advertise>
+@{
+    ViewData["Title"] = "Advertisements";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">All Advertisement Requests</h5>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Email</th>
+                        <th>City</th>
+                        <th>Payment</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Email</td>
+                            <td>@item.City</td>
+                            <td>@item.PaymentType ($@item.PaymentAmount)</td>
+                            <td><span class="badge @(item.PaymentStatus == "Paid" ? "bg-success" : "bg-warning text-dark")">@item.PaymentStatus</span></td>
+                            <td class="text-end">
+                                <a asp-action="AdvertisementDetails" asp-route-id="@item.AdvertiseId" class="btn btn-outline-secondary btn-sm">Details</a>
+                                <a asp-action="EditAdvertisement" asp-route-id="@item.AdvertiseId" class="btn btn-outline-primary btn-sm">Edit</a>
+                                <a asp-action="DeleteAdvertisement" asp-route-id="@item.AdvertiseId" class="btn btn-outline-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

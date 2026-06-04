@@ -1,0 +1,17 @@
+@model Radiocab.Models.Listing
+@{
+    ViewData["Title"] = "Delete Listing";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card border-danger">
+    <div class="card-body">
+        <h5 class="text-danger">Delete Listing Confirmation</h5>
+        <p>Are you sure you want to delete listing <strong>@Model.Name</strong> (@Model.CompanyCode)?</p>
+        <form asp-action="DeleteListing" method="post">
+            <input type="hidden" asp-for="ListingId" name="id" />
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a asp-action="Listings" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

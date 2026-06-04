@@ -1,0 +1,17 @@
+@model Radiocab.Models.Driver
+@{
+    ViewData["Title"] = "Delete Driver";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card border-danger">
+    <div class="card-body">
+        <h5 class="text-danger">Delete Driver Confirmation</h5>
+        <p>Are you sure you want to delete driver <strong>@Model.Name</strong> (@Model.DriverCode)?</p>
+        <form asp-action="DeleteDriver" method="post">
+            <input type="hidden" asp-for="DriverId" name="id" />
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a asp-action="Drivers" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

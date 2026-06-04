@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewData["Title"] = "AddCompany";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="header">
+    <h1>Add New Company</h1>
+    <p>Register a new transportation company in the Radio Cab system</p>
+</div>
+
+<div class="content-section">
+    <h2>Company Registration Form</h2>
+
+    <form class="company-form">
+        <div class="form-group">
+            <label for="companyName">Company Name</label>
+            <input type="text" id="companyName" placeholder="Enter company name" required />
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="Enter company email" required />
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="Enter company phone number" required />
+        </div>
+
+        <div class="form-group">
+            <label for="regNumber">Registration Number</label>
+            <input type="text" id="regNumber" placeholder="Enter company registration number" required />
+        </div>
+
+        <div class="form-group">
+            <label for="companyType">Company Type</label>
+            <select id="companyType" required>
+                <option value="">Select Type</option>
+                <option value="Private">Private</option>
+                <option value="Public">Public</option>
+                <option value="Partnership">Partnership</option>
+                <option value="Limited Liability">Limited Liability</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="logo">Company Logo</label>
+            <input type="file" id="logo" accept="image/*" required />
+        </div>
+
+        <div class="form-group" style="grid-column: span 2;">
+            <label for="address">Address</label>
+            <textarea id="address" rows="3" placeholder="Enter company address" required></textarea>
+        </div>
+
+        <div class="form-group" style="grid-column: span 2;">
+            <label for="description">Company Description</label>
+            <textarea id="description" rows="3" placeholder="Enter short description about the company"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Add Company</button>
+    </form>
+</div>
+

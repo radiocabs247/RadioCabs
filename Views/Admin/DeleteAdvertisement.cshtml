@@ -1,0 +1,17 @@
+@model Radiocab.Models.Advertise
+@{
+    ViewData["Title"] = "Delete Advertisement";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card border-danger">
+    <div class="card-body">
+        <h5 class="text-danger">Delete Advertisement Confirmation</h5>
+        <p>Are you sure you want to delete advertisement request for <strong>@Model.Name</strong>?</p>
+        <form asp-action="DeleteAdvertisement" method="post">
+            <input type="hidden" asp-for="AdvertiseId" name="id" />
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a asp-action="Advertisements" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

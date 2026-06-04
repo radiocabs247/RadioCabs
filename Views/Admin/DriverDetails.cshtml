@@ -1,0 +1,21 @@
+@model Radiocab.Models.Driver
+@{
+    ViewData["Title"] = "Driver Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">Driver Details</h5>
+        <dl class="row">
+            <dt class="col-sm-3">Name</dt><dd class="col-sm-9">@Model.Name</dd>
+            <dt class="col-sm-3">Driver ID</dt><dd class="col-sm-9">@Model.DriverCode</dd>
+            <dt class="col-sm-3">City</dt><dd class="col-sm-9">@Model.City</dd>
+            <dt class="col-sm-3">Email</dt><dd class="col-sm-9">@Model.Email</dd>
+            <dt class="col-sm-3">Mobile</dt><dd class="col-sm-9">@Model.Mobile</dd>
+            <dt class="col-sm-3">Experience</dt><dd class="col-sm-9">@Model.Experience years</dd>
+            <dt class="col-sm-3">Payment</dt><dd class="col-sm-9">@Model.PaymentType - $@Model.PaymentAmount (@Model.PaymentStatus)</dd>
+        </dl>
+        <a asp-action="Drivers" class="btn btn-secondary btn-sm">Back</a>
+    </div>
+</div>

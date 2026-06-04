@@ -1,0 +1,96 @@
+@model List<Radiocab.Models.Driver>
+@{
+    ViewData["Title"] = "Drivers";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">All Drivers</h5>
+            <a asp-action="AddDriver" class="btn btn-primary btn-sm">Add Driver</a>
+        </div>
+        <form method="get" class="row g-2 mb-3">
+            <div class="col-md-4">
+                <input type="text" name="search" class="form-control" placeholder="Search driver or city" value="@ViewBag.Search" />
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-select">
+                    <option selected="@(ViewBag.Status=="All")">All</option>
+                    <option selected="@(ViewBag.Status=="Pending")">Pending</option>
+                    <option selected="@(ViewBag.Status=="Approved")">Approved</option>
+                    <option selected="@(ViewBag.Status=="Rejected")">Rejected</option>
+                </select>
+            </div>
+            <div class="col-md-2"><button class="btn btn-warning w-100">Filter</button></div>
+        </form>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Driver ID</th>
+                        <th>City</th>
+                        <th>Email</th>
+                        <th>Approval</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.DriverCode</td>
+                                <td>@item.City</td>
+                                <td>@item.Email</td>
+                                <td><span class="badge @(item.Status=="Approved"?"bg-success":item.Status=="Rejected"?"bg-danger":"bg-warning text-dark")">@item.Status</span></td>
+                                <td class="text-end">
+                                    @if (item.Status != "Approved")
+                                    {
+                                        <button type="button" class="btn btn-success btn-sm confirm-status" data-bs-toggle="modal" data-bs-target="#statusModal" data-action="@Url.Action("ApproveDriver", "Admin")" data-id="@item.DriverId" data-title="Approve driver?">Approve</button>
+                                    }
+                                    @if (item.Status != "Rejected")
+                                    {
+                                        <button type="button" class="btn btn-danger btn-sm confirm-status" data-bs-toggle="modal" data-bs-target="#statusModal" data-action="@Url.Action("RejectDriver", "Admin")" data-id="@item.DriverId" data-title="Reject driver?">Reject</button>
+                                    }
+                                    <a asp-action="DriverDetails" asp-route-id="@item.DriverId" class="btn btn-outline-secondary btn-sm">Details</a>
+                                    <a asp-action="EditDriver" asp-route-id="@item.DriverId" class="btn btn-outline-primary btn-sm">Edit</a>
+                                    <a asp-action="DeleteDriver" asp-route-id="@item.DriverId" class="btn btn-outline-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="6"><div class="empty-state"><i class="fa fa-id-card text-warning fs-4"></i><p class="mb-0 mt-2">No drivers found for selected filter.</p></div></td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="statusModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title" id="statusModalTitle">Confirm</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">Are you sure?</div>
+            <div class="modal-footer">
+                <form method="post" id="statusForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="statusId" />
+                    <button class="btn btn-warning">Confirm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+document.querySelectorAll(".confirm-status").forEach(btn=>btn.addEventListener("click",()=>{document.getElementById("statusForm").action=btn.dataset.action;document.getElementById("statusId").value=btn.dataset.id;document.getElementById("statusModalTitle").textContent=btn.dataset.title;}));
+</script>
+}
