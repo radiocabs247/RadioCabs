@@ -1,0 +1,167 @@
+@model List<Radiocab.Models.Payment>
+@{
+    ViewData["Title"] = "Payment Management";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0"><i class="fas fa-money-bill-wave me-2"></i>Payment Management</h4>
+                        <div>
+                            <a asp-action="Index" asp-controller="Admin" class="btn btn-outline-light btn-sm">
+                                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Filters -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <form asp-action="AdminPayments" method="get" class="d-flex gap-2">
+                                <input type="text" name="search" class="form-control" placeholder="Search by Transaction ID or Receipt..." value="@ViewBag.Search">
+                                <button type="submit" class="btn btn-dark">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="btn-group" role="group">
+                                <a asp-action="AdminPayments" asp-route-status="All" class="btn @(ViewBag.Status == "All" ? "btn-dark" : "btn-outline-dark")">All</a>
+                                <a asp-action="AdminPayments" asp-route-status="Paid" class="btn @(ViewBag.Status == "Paid" ? "btn-dark" : "btn-outline-dark")">Paid</a>
+                                <a asp-action="AdminPayments" asp-route-status="Pending" class="btn @(ViewBag.Status == "Pending" ? "btn-dark" : "btn-outline-dark")">Pending</a>
+                                <a asp-action="AdminPayments" asp-route-status="Failed" class="btn @(ViewBag.Status == "Failed" ? "btn-dark" : "btn-outline-dark")">Failed</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Receipt #</th>
+                                        <th>Transaction ID</th>
+                                        <th>Entity</th>
+                                        <th>Entity ID</th>
+                                        <th>Amount</th>
+                                        <th>Method</th>
+                                        <th>Type</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var payment in Model)
+                                    {
+                                        <tr>
+                                            <td><span class="badge bg-secondary">@payment.ReceiptNumber</span></td>
+                                            <td><small>@payment.TransactionId</small></td>
+                                            <td>@payment.EntityType</td>
+                                            <td>@payment.EntityId</td>
+                                            <td class="fw-bold text-success">
+                                                @{
+                                                    decimal demoAmount = 0;
+
+                                                    if (payment.EntityType == "Listing")
+                                                    {
+                                                        demoAmount = payment.PaymentType == "Monthly" ? 15 : 40;
+                                                    }
+                                                    else if (payment.EntityType == "Driver")
+                                                    {
+                                                        demoAmount = payment.PaymentType == "Monthly" ? 10 : 25;
+                                                    }
+                                                    else if (payment.EntityType == "Advertisement")
+                                                    {
+                                                        demoAmount = payment.PaymentType == "Monthly" ? 15 : 40;
+                                                    }
+                                                }
+                                                $@demoAmount
+                                            </td>
+                                            <td>@payment.PaymentMethod</td>
+                                            <td>@payment.PaymentType</td>
+                                            <td>@payment.PaymentDate.ToString("dd MMM yyyy")</td>
+                                            <td>
+                                                @if (payment.Status == "Paid")
+                                                {
+                                                    <span class="badge bg-success">Paid</span>
+                                                }
+                                                else if (payment.Status == "Pending")
+                                                {
+                                                    <span class="badge bg-warning text-dark">Pending</span>
+                                                }
+                                                else if (payment.Status == "Failed")
+                                                {
+                                                    <span class="badge bg-danger">Failed</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-info">@payment.Status</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <a asp-action="PaymentDetails" asp-route-id="@payment.PaymentId" class="btn btn-outline-dark" title="View Details">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a asp-action="DeletePayment" asp-route-id="@payment.PaymentId" class="btn btn-outline-danger" title="Delete">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        @if (ViewBag.TotalPages > 1)
+                        {
+                            <nav class="mt-3">
+                                <ul class="pagination justify-content-center">
+                                    @if (ViewBag.CurrentPage > 1)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" href="@Url.Action("AdminPayments", new { status = ViewBag.Status, search = ViewBag.Search, page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">Previous</a>
+                                        </li>
+                                    }
+
+                                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                    {
+                                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                            <a class="page-link" href="@Url.Action("AdminPayments", new { status = ViewBag.Status, search = ViewBag.Search, page = i, pageSize = ViewBag.PageSize })">@i</a>
+                                        </li>
+                                    }
+
+                                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" href="@Url.Action("AdminPayments", new { status = ViewBag.Status, search = ViewBag.Search, page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">Next</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </nav>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <div class="display-4 text-muted mb-3">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <h5 class="text-muted">No payments found</h5>
+                            <p class="text-muted">There are no payments matching your criteria.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

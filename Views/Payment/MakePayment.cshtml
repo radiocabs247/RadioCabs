@@ -1,0 +1,100 @@
+@model Radiocab.Models.Payment
+@{
+    ViewData["Title"] = "Make Payment";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <h4 class="mb-0"><i class="fas fa-credit-card me-2"></i>Make Payment</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-info">
+    <strong>Payment Amount:</strong> $25.00
+</div>
+
+                    <form asp-action="ProcessPayment" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="EntityType" value="@ViewBag.EntityType" />
+                        <input type="hidden" asp-for="EntityId" value="@ViewBag.EntityId" />
+                       <input type="hidden" asp-for="Amount" value="25" />
+                        <input type="hidden" asp-for="PaymentType" />
+                        <input type="hidden" asp-for="TransactionId" />
+                        <input type="hidden" asp-for="PaymentDate" />
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Payment Method</label>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="form-check payment-option">
+                                        <input class="form-check-input" type="radio" name="PaymentMethod" value="JazzCash" id="jazzcash" required>
+                                        <label class="form-check-label" for="jazzcash">
+                                            <i class="fas fa-mobile-alt me-2"></i>JazzCash
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check payment-option">
+                                        <input class="form-check-input" type="radio" name="PaymentMethod" value="EasyPaisa" id="easypaisa" required>
+                                        <label class="form-check-label" for="easypaisa">
+                                            <i class="fas fa-mobile-alt me-2"></i>EasyPaisa
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check payment-option">
+                                        <input class="form-check-input" type="radio" name="PaymentMethod" value="CreditCard" id="creditcard" required>
+                                        <label class="form-check-label" for="creditcard">
+                                            <i class="fas fa-credit-card me-2"></i>Credit Card
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label fw-semibold">Description (Optional)</label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Add any notes about this payment"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <i class="fas fa-info-circle me-2"></i>
+                            This is a mock payment integration. In production, this would connect to actual payment gateways.
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning btn-lg fw-semibold">
+    <i class="fas fa-lock me-2"></i>Pay $25.00
+</button>
+                            <a asp-action="Index" asp-controller="MyController1" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .payment-option {
+        border: 2px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .payment-option:hover {
+        border-color: #FFD000;
+        background-color: #fff9e6;
+    }
+    .payment-option input:checked + label {
+        color: #FFD000;
+        font-weight: 600;
+    }
+</style>
