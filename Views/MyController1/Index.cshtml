@@ -1,0 +1,662 @@
+@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var featuredCompanies = ViewBag.FeaturedCompanies as List<Radiocab.Models.Listing> ?? new List<Radiocab.Models.Listing>();
+    var featuredDrivers = ViewBag.FeaturedDrivers as List<Radiocab.Models.Driver> ?? new List<Radiocab.Models.Driver>();
+    var advertisements = ViewBag.Advertisements as List<Radiocab.Models.Advertise> ?? new List<Radiocab.Models.Advertise>();
+    var feedbacks = ViewBag.Feedbacks as List<Radiocab.Models.Feedback> ?? new List<Radiocab.Models.Feedback>();
+}
+
+<!-- Hero Section -->
+<section class="animate-fade-in text-white py-5">
+    <div class="container py-4">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <span class="badge bg-warning text-dark mb-3 px-3 py-2 fw-bold text-uppercase"><i class="fas fa-taxi me-2"></i>Premium Cab Directory</span>
+                <h1 class="display-4 fw-bold mb-4" style="color: black;">Ride Smarter with <span class="gradient-text font-weight-extrabold" style="color: black;">RadioCabs</span></h1>
+                <p class="lead mb-4 opacity-90" style="color: black;">Discover trusted radio taxi companies, verified professional drivers, and advertising solutions. Your seamless journey starts here.</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a asp-action="Listing" class="btn btn-warning btn-lg fw-semibold px-4"><i class="fas fa-building me-2"></i>Explore Companies</a>
+                    <a asp-action="Drivers" class="btn btn-outline-light btn-lg px-4"><i class="fas fa-id-card me-2"></i>Find Drivers</a>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="glass-dark p-4 rounded-4 animate-slide-in">
+                    <h5 class="mb-3 text-warning"><i class="fas fa-search me-2"></i>Quick Directory Search</h5>
+                    <form class="row g-3" action="@Url.Action("Listing", "MyController1")" method="get">
+                        <div class="col-12">
+                            <input type="text" name="search" id="quickSearchInput" class="form-control" placeholder="Enter city, company, or driver...">
+                        </div>
+                        <div class="col-md-6">
+                            <select id="quickSearchType" class="form-select">
+                                <option value="company">Companies</option>
+                                <option value="driver">Drivers</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" onclick="handleQuickSearch()" class="btn btn-warning w-100 fw-semibold"><i class="fas fa-search me-1"></i>Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-6 col-md-3">
+                <div class="stat-card p-4 text-center h-100">
+                    <div class="display-5 fw-bold mb-2 text-warning"><i class="fas fa-user-shield me-2"></i>250+</div>
+                    <div class="text-muted fw-semibold">Verified Drivers</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card p-4 text-center h-100">
+                    <div class="display-5 fw-bold mb-2 text-warning"><i class="fas fa-building me-2"></i>120+</div>
+                    <div class="text-muted fw-semibold">Cab Companies</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card p-4 text-center h-100">
+                    <div class="display-5 fw-bold mb-2 text-warning"><i class="fas fa-map-marked-alt me-2"></i>40+</div>
+                    <div class="text-muted fw-semibold">Cities Covered</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card p-4 text-center h-100">
+                    <div class="display-5 fw-bold mb-2 text-warning"><i class="fas fa-history me-2"></i>24/7</div>
+                    <div class="text-muted fw-semibold">Service Desk</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Companies Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <span class="badge bg-warning text-dark mb-2 px-3">Featured Partner Listings</span>
+                <h2 class="fw-bold mb-0"><i class="fas fa-taxi me-2 text-warning"></i>Radio Cab Companies</h2>
+            </div>
+            <a asp-action="Listing" class="btn btn-outline-dark fw-semibold"><i class="fas fa-list me-1"></i>View All Listings</a>
+        </div>
+        <div class="row g-4">
+            @if (featuredCompanies.Any())
+            {
+                foreach (var company in featuredCompanies)
+                {
+                    <div class="col-md-4">
+                        <div class="premium-card p-4 h-100 d-flex flex-column border-top border-5 border-warning">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <span class="badge bg-@(company.MembershipType == "Premium" ? "danger" : company.MembershipType == "Basic" ? "primary" : "secondary")">
+                                    @company.MembershipType Plan
+                                </span>
+                                <span class="badge bg-success-subtle text-success border border-success"><i class="fas fa-check-circle me-1"></i>Verified</span>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-dark text-warning d-flex align-items-center justify-content-center me-3" style="width: 55px; height: 55px; font-size: 1.5rem; flex-shrink: 0;">
+                                    @if (!string.IsNullOrEmpty(company.ImagePath))
+                                    {
+                                        <img src="@company.ImagePath" alt="@company.Name" class="w-100 h-100 rounded-circle object-fit-cover">
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-building"></i>
+                                    }
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-0">@company.Name</h5>
+                                    <small class="text-muted"><i class="fas fa-map-marker-alt me-1 text-danger"></i>@company.City</small>
+                                </div>
+                            </div>
+                            <p class="text-muted small flex-grow-1">@(string.IsNullOrEmpty(company.Description) ? "Professional taxi operations offering premium transportation, trusted logistics, and corporate employee transport solutions." : company.Description)</p>
+                            <hr class="my-3 opacity-25">
+                            <div class="vstack gap-2 mb-3">
+                                <div class="d-flex justify-content-between text-muted small">
+                                    <span><i class="fas fa-user-tie me-2 text-warning"></i>Contact:</span>
+                                    <strong class="text-dark">@company.ContactPerson</strong>
+                                </div>
+                                <div class="d-flex justify-content-between text-muted small">
+                                    <span><i class="fas fa-phone-alt me-2 text-warning"></i>Mobile:</span>
+                                    <strong class="text-dark">@company.Mobile</strong>
+                                </div>
+                            </div>
+                            <button class="btn btn-warning w-100 fw-semibold btn-sm mt-auto" onclick="showCompanyModal('@company.Name', '@company.CompanyCode', '@company.ContactPerson', '@company.Designation', '@company.City', '@company.Mobile', '@company.Telephone', '@company.Fax', '@company.Email', '@company.Address', '@company.Description')">
+                                <i class="fas fa-info-circle me-1"></i>View Details
+                            </button>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <div class="empty-state py-5"><i class="fas fa-building fs-3 text-muted mb-2"></i><p class="mb-0 text-muted">No premium partner listings verified yet. Register today to stand out.</p></div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Featured Drivers Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <span class="badge bg-warning text-dark mb-2 px-3">Top Rated Professional Drivers</span>
+                <h2 class="fw-bold mb-0"><i class="fas fa-user-circle me-2 text-warning"></i>Featured Drivers</h2>
+            </div>
+            <a asp-action="Drivers" class="btn btn-outline-dark fw-semibold"><i class="fas fa-users me-1"></i>View All Drivers</a>
+        </div>
+        <div class="row g-4">
+            @if (featuredDrivers.Any())
+            {
+                foreach (var driver in featuredDrivers)
+                {
+                    <div class="col-md-4">
+                        <div class="premium-card p-4 h-100 d-flex flex-column border-top border-5 border-dark">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-dark text-warning d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; font-size: 1.5rem; flex-shrink: 0; overflow:hidden;">
+                                    @if (!string.IsNullOrEmpty(driver.PhotoPath))
+                                    {
+                                        <img src="@driver.PhotoPath" alt="@driver.Name" class="w-100 h-100 object-fit-cover">
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-user-tie"></i>
+                                    }
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-0">@driver.Name</h5>
+                                    <small class="text-muted"><i class="fas fa-map-marker-alt me-1 text-danger"></i>@driver.City</small>
+                                </div>
+                            </div>
+                            <div class="badge bg-warning text-dark align-self-start mb-3 px-3">
+                                <i class="fas fa-briefcase me-1"></i>@driver.Experience Years Experience
+                            </div>
+                            <p class="text-muted small flex-grow-1">@(string.IsNullOrEmpty(driver.Description) ? "Professional driver with safe track record and complete vehicle documentation." : driver.Description)</p>
+                            <hr class="my-3 opacity-25">
+                            <div class="vstack gap-2 mb-3">
+                                <div class="d-flex justify-content-between text-muted small">
+                                    <span><i class="fas fa-id-badge me-2 text-warning"></i>Driver ID:</span>
+                                    <strong class="text-dark">@driver.DriverCode</strong>
+                                </div>
+                                <div class="d-flex justify-content-between text-muted small">
+                                    <span><i class="fas fa-mobile-alt me-2 text-warning"></i>Phone:</span>
+                                    <strong class="text-dark">@driver.Mobile</strong>
+                                </div>
+                            </div>
+                            <button class="btn btn-dark w-100 fw-semibold btn-sm mt-auto" onclick="showDriverModal('@driver.Name', '@driver.DriverCode', '@driver.City', '@driver.ContactPerson', '@driver.Mobile', '@driver.Telephone', '@driver.Email', '@driver.Experience', '@driver.Address', '@driver.Description')">
+                                <i class="fas fa-address-card me-1"></i>View Profile
+                            </button>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <div class="empty-state py-5"><i class="fas fa-users fs-3 text-muted mb-2"></i><p class="mb-0 text-muted">No verified drivers listed yet. Register driver profile to join.</p></div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Membership Plans Section -->
+<section class="py-5 bg-light" id="pricing-plans">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="badge bg-warning text-dark mb-2 px-3 fw-bold">Maximize Business Reach</span>
+            <h2 class="fw-bold mb-3">Company Listing Membership Plans</h2>
+            <p class="text-muted max-w-2xl mx-auto">Choose a plan that matches your cab company's branding and marketing requirements.</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <!-- Free Plan -->
+            <div class="col-md-4 col-lg-3">
+                <div class="premium-card p-4 text-center h-100 border border-light">
+                    <div class="text-muted text-uppercase fw-bold mb-2">Free Plan</div>
+                    <div class="display-6 fw-bold mb-2">$0</div>
+                    <div class="text-secondary small mb-4">Forever Free Listing</div>
+                    <hr class="my-3 opacity-25">
+                    <ul class="list-unstyled text-start mb-4 fs-7 vstack gap-2">
+                        <li><i class="fas fa-check text-success me-2"></i>Standard Directory Placement</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Basic Profile Details</li>
+                        <li><i class="fas fa-times text-danger me-2"></i>No Premium Badge</li>
+                        <li><i class="fas fa-times text-danger me-2"></i>No Customer Leads Tool</li>
+                    </ul>
+                    <a asp-action="Listing" class="btn btn-outline-dark w-100 fw-semibold mt-auto">Get Started</a>
+                </div>
+            </div>
+            <!-- Basic Plan -->
+            <div class="col-md-4 col-lg-3">
+                <div class="premium-card p-4 text-center h-100 border border-primary">
+                    <div class="text-primary text-uppercase fw-bold mb-2">Basic Plan</div>
+                    <div class="display-6 fw-bold mb-2">$15<span class="fs-6 text-muted">/mo</span></div>
+                    <div class="text-secondary small mb-4">Or $40 Quarterly (Save 11%)</div>
+                    <hr class="my-3 opacity-25">
+                    <ul class="list-unstyled text-start mb-4 fs-7 vstack gap-2">
+                        <li><i class="fas fa-check text-success me-2"></i>Standard Placement Priority</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Verified Badge Protection</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Full Contact Profiles</li>
+                        <li><i class="fas fa-times text-danger me-2"></i>No Featured Home Listing</li>
+                    </ul>
+                    <a asp-action="Listing" class="btn btn-primary w-100 fw-semibold mt-auto">Subscribe Basic</a>
+                </div>
+            </div>
+            <!-- Premium Plan -->
+            <div class="col-md-4 col-lg-3">
+                <div class="premium-card p-4 text-center h-100 border border-warning position-relative shadow-lg">
+                    <span class="position-absolute top-0 start-50 translate-middle badge bg-warning text-dark px-3 py-1 fw-bold text-uppercase rounded-pill">Most Popular</span>
+                    <div class="text-warning text-uppercase fw-bold mb-2 mt-2">Premium Plan</div>
+                    <div class="display-6 fw-bold mb-2">$25<span class="fs-6 text-muted">/mo</span></div>
+                    <div class="text-secondary small mb-4">Or $70 Quarterly (Save 7%)</div>
+                    <hr class="my-3 opacity-25">
+                    <ul class="list-unstyled text-start mb-4 fs-7 vstack gap-2">
+                        <li><i class="fas fa-check text-success me-2"></i>Top Spot Search Priority</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Featured Home Page Listing</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Verified Badge Protection</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Customer Inquiry Alerts</li>
+                    </ul>
+                    <a asp-action="Listing" class="btn btn-warning w-100 fw-semibold mt-auto">Subscribe Premium</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Active Advertisements Section -->
+@if (advertisements.Any())
+{
+    <section class="py-5 bg-dark text-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="badge bg-warning text-dark mb-2 px-3">Partner Campaigns</span>
+                <h2 class="fw-bold mb-2 text-white"><i class="fas fa-bullhorn text-warning me-2"></i>Sponsored Opportunities</h2>
+            </div>
+            <div class="row g-4 justify-content-center">
+                @foreach (var ad in advertisements)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="glass-dark p-4 rounded-4 h-100 d-flex flex-column">
+                            @if (!string.IsNullOrEmpty(ad.BannerPath))
+                            {
+                                <img src="@ad.BannerPath" alt="@ad.Name" class="w-100 rounded-3 mb-3 object-fit-cover" style="height: 160px;">
+                            }
+                            else
+                            {
+                                <div class="bg-secondary bg-opacity-25 rounded-3 mb-3 d-flex align-items-center justify-content-center text-warning text-opacity-75" style="height: 160px; font-size: 2.5rem;">
+                                    <i class="fas fa-images"></i>
+                                </div>
+                            }
+                            <h5 class="fw-bold mb-1 text-warning">@ad.Name</h5>
+                            <small class="text-light text-opacity-75 d-block mb-2"><i class="fas fa-map-marker-alt me-1 text-danger"></i>@ad.City</small>
+                            <p class="text-light text-opacity-50 small flex-grow-1">@ad.Description</p>
+                            <hr class="my-3 border-secondary border-opacity-50">
+                            <div class="d-flex justify-content-between align-items-center small text-light text-opacity-75">
+                                <span><i class="fas fa-phone-alt me-1 text-warning"></i>@ad.Mobile</span>
+                                <span><i class="fas fa-envelope me-1 text-warning"></i>@ad.Email</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<!-- Testimonials / Feedback Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="badge bg-warning text-dark mb-2 px-3 fw-bold">Customer Experiences</span>
+            <h2 class="fw-bold mb-3"><i class="fas fa-comments text-warning me-2"></i>What Our Users Say</h2>
+        </div>
+        <div class="row g-4 justify-content-center">
+            @if (feedbacks.Any())
+            {
+                foreach (var f in feedbacks)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="premium-card p-4 h-100 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge bg-warning text-dark fw-bold">@f.Type</span>
+                                <small class="text-muted">@f.CreatedAt.ToString("MMM dd, yyyy")</small>
+                            </div>
+                            <p class="text-muted flex-grow-1 italic">"@f.Description"</p>
+                            <hr class="my-3 opacity-25">
+                            <div class="d-flex align-items-center mt-auto">
+                                <div class="rounded-circle bg-dark text-warning d-flex align-items-center justify-content-center me-3" style="width: 42px; height: 42px; font-weight: 700;">
+                                    @f.Name[0]
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">@f.Name</h6>
+                                    <small class="text-muted"><i class="fas fa-map-marker-alt text-danger me-1"></i>@f.City</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <!-- Fallback premium testimonials -->
+                <div class="col-md-4">
+                    <div class="premium-card p-4 h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-warning text-dark fw-bold">Compliment</span>
+                            <small class="text-muted">June 2026</small>
+                        </div>
+                        <p class="text-muted flex-grow-1">"Excellent directory! I managed to locate a high-quality radio cab company in Delhi within a few minutes. Reliable search capabilities."</p>
+                        <hr class="my-3 opacity-25">
+                        <div class="d-flex align-items-center mt-auto">
+                            <div class="rounded-circle bg-dark text-warning d-flex align-items-center justify-content-center me-3" style="width: 42px; height: 42px; font-weight: 700;">A</div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Abhay Kumar</h6>
+                                <small class="text-muted">Delhi</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="premium-card p-4 h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-warning text-dark fw-bold">Compliment</span>
+                            <small class="text-muted">May 2026</small>
+                        </div>
+                        <p class="text-muted flex-grow-1">"Highly recommend registering as a driver. I registered, made my payment, got approved by the admin, and received three job inquiries this week!"</p>
+                        <hr class="my-3 opacity-25">
+                        <div class="d-flex align-items-center mt-auto">
+                            <div class="rounded-circle bg-dark text-warning d-flex align-items-center justify-content-center me-3" style="width: 42px; height: 42px; font-weight: 700;">M</div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Manoj Singh</h6>
+                                <small class="text-muted">Mumbai</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="premium-card p-4 h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-warning text-dark fw-bold">Suggestion</span>
+                            <small class="text-muted">May 2026</small>
+                        </div>
+                        <p class="text-muted flex-grow-1">"Advertising packages are highly cost-effective compared to traditional newspaper campaigns. We noticed a substantial rise in monthly calls."</p>
+                        <hr class="my-3 opacity-25">
+                        <div class="d-flex align-items-center mt-auto">
+                            <div class="rounded-circle bg-dark text-warning d-flex align-items-center justify-content-center me-3" style="width: 42px; height: 42px; font-weight: 700;">S</div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Suresh Mehta</h6>
+                                <small class="text-muted">Bangalore</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Contact Information Section -->
+<section class="py-5" id="contact-details">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="card p-4 h-100 bg-dark text-white border-0 shadow-lg">
+                    <h3 class="fw-bold text-warning mb-3"><i class="fas fa-envelope-open-text me-2"></i>Contact RadioCabs</h3>
+                    <p class="text-light text-opacity-75 mb-4">Have questions about listings, driver registrations, or advertisement packages? Get in touch with our operations team.</p>
+                    <div class="vstack gap-4">
+                        <div class="d-flex align-items-start">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center bg-warning text-dark me-3" style="width: 45px; height: 45px; flex-shrink: 0;">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 fw-bold text-warning">Head Office Address</h6>
+                                <span class="text-light text-opacity-75 small">APWA Complex, 1st Floor, Agha Khan 3 Rd, Garden East Saddar Town, Karachi, 74400</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center bg-warning text-dark me-3" style="width: 45px; height: 45px; flex-shrink: 0;">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 fw-bold text-warning">Customer Helpline</h6>
+                                <span class="text-light text-opacity-75 small">+91 124 555-CABS (2227)</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center bg-warning text-dark me-3" style="width: 45px; height: 45px; flex-shrink: 0;">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 fw-bold text-warning">Email Support</h6>
+                                <span class="text-light text-opacity-75 small">support@radiocabs.in</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="card p-4 h-100 bg-white">
+                    <h4 class="fw-bold mb-3"><i class="fas fa-paper-plane text-warning me-2"></i>Send an Inquiry</h4>
+                    <form id="contactForm" class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Your Name</label>
+                            <input type="text" class="form-control" id="contactName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Email Address</label>
+                            <input type="email" class="form-control" id="contactEmail" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Subject</label>
+                            <input type="text" class="form-control" id="contactSubject" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Message Description</label>
+                            <textarea class="form-control" rows="4" id="contactMessage" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-warning fw-semibold"><i class="fas fa-paper-plane me-1"></i>Submit Inquiry</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Company Details Modal -->
+<div class="modal fade" id="companyDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+            <div class="modal-header bg-dark text-white border-0 py-3">
+                <h5 class="modal-title fw-bold text-warning" id="compModalTitle">Company Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 bg-light">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Company Code</small>
+                            <strong class="fs-6" id="compCode">N/A</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">City / Hub Location</small>
+                            <strong class="fs-6" id="compCity">N/A</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Contact Person</small>
+                            <strong class="fs-6" id="compPerson">N/A</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Designation</small>
+                            <strong class="fs-6" id="compDesg">N/A</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Mobile</small>
+                            <strong class="fs-6 text-primary" id="compMobile">N/A</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Telephone / Fax</small>
+                            <strong class="fs-6 text-primary" id="compPhone">N/A</strong>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Email Address</small>
+                            <strong class="fs-6" id="compEmail">N/A</strong>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Office Address</small>
+                            <p class="mb-0" id="compAddr">N/A</p>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Business Description</small>
+                            <p class="mb-0 text-secondary" id="compDesc">N/A</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-dark border-0 py-2">
+                <button type="button" class="btn btn-warning px-4 btn-sm fw-semibold" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Driver Details Modal -->
+<div class="modal fade" id="driverDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+            <div class="modal-header bg-dark text-white border-0 py-3">
+                <h5 class="modal-title fw-bold text-warning" id="driverModalTitle">Driver Profile</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 bg-light">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Driver ID Code</small>
+                            <strong class="fs-6" id="dCode">N/A</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Location City</small>
+                            <strong class="fs-6" id="dCity">N/A</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Experience (Years)</small>
+                            <strong class="fs-6" id="dExp">N/A</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Primary Mobile</small>
+                            <strong class="fs-6 text-primary" id="dMobile">N/A</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Alternative Contact</small>
+                            <strong class="fs-6" id="dPhone">N/A</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Email Address</small>
+                            <strong class="fs-6" id="dEmail">N/A</strong>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Residential/Current Address</small>
+                            <p class="mb-0" id="dAddr">N/A</p>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="bg-white p-3 rounded-3 shadow-sm">
+                            <small class="text-muted d-block uppercase fw-bold">Profile Details</small>
+                            <p class="mb-0 text-secondary" id="dDesc">N/A</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-dark border-0 py-2">
+                <button type="button" class="btn btn-warning px-4 btn-sm fw-semibold" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function handleQuickSearch() {
+        const query = document.getElementById("quickSearchInput").value.trim().toLowerCase();
+        const searchType = document.getElementById("quickSearchType").value;
+
+        if (searchType === "company") {
+            window.location.href = `/MyController1/Listing?search=${encodeURIComponent(query)}`;
+        } else {
+            window.location.href = `/MyController1/Drivers?search=${encodeURIComponent(query)}`;
+        }
+    }
+
+    function showCompanyModal(name, code, person, designation, city, mobile, tel, fax, email, address, description) {
+        document.getElementById("compModalTitle").textContent = name;
+        document.getElementById("compCode").textContent = code || "N/A";
+        document.getElementById("compCity").textContent = city || "N/A";
+        document.getElementById("compPerson").textContent = person || "N/A";
+        document.getElementById("compDesg").textContent = designation || "N/A";
+        document.getElementById("compMobile").textContent = mobile || "N/A";
+        document.getElementById("compPhone").textContent = (tel ? "Tel: " + tel : "") + (fax ? " / Fax: " + fax : "") || "N/A";
+        document.getElementById("compEmail").textContent = email || "N/A";
+        document.getElementById("compAddr").textContent = address || "N/A";
+        document.getElementById("compDesc").textContent = description || "No custom company description provided.";
+        
+        new bootstrap.Modal(document.getElementById('companyDetailModal')).show();
+    }
+
+    function showDriverModal(name, code, city, person, mobile, telephone, email, experience, address, description) {
+        document.getElementById("driverModalTitle").textContent = name;
+        document.getElementById("dCode").textContent = code || "N/A";
+        document.getElementById("dCity").textContent = city || "N/A";
+        document.getElementById("dExp").textContent = experience ? experience + " Years" : "N/A";
+        document.getElementById("dMobile").textContent = mobile || "N/A";
+        document.getElementById("dPhone").textContent = telephone || "N/A";
+        document.getElementById("dEmail").textContent = email || "N/A";
+        document.getElementById("dAddr").textContent = address || "N/A";
+        document.getElementById("dDesc").textContent = description || "No profile description provided.";
+        
+        new bootstrap.Modal(document.getElementById('driverDetailModal')).show();
+    }
+
+    document.getElementById("contactForm")?.addEventListener("submit", function(e) {
+        e.preventDefault();
+        alert("Thank you for reaching out! Your inquiry has been submitted and our team will get back to you shortly.");
+        this.reset();
+    });
+</script>
+}

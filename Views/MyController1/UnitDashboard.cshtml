@@ -1,0 +1,283 @@
+@model Radiocab.Models.RegisteredUnitDashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">Welcome, @Model.UserName</h2>
+            <p class="text-muted mb-0">@Model.UnitType Dashboard | @Model.UserEmail</p>
+        </div>
+        <div>
+            <a asp-action="PaymentHistory" asp-controller="Payment" class="btn btn-outline-dark me-2">Payment History</a>
+            <a asp-action="Logout" asp-controller="MyController1" class="btn btn-outline-danger">Logout</a>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.ApprovalStatus))
+    {
+        <div class="alert @(Model.ApprovalStatus=="Approved"?"alert-success":Model.ApprovalStatus=="Rejected"?"alert-danger":"alert-warning")">
+            <strong>Approval Status:</strong> @Model.ApprovalStatus
+            @if (!string.IsNullOrWhiteSpace(Model.ApprovalMessage))
+            {
+                <span class="d-block">@Model.ApprovalMessage</span>
+            }
+        </div>
+    }
+
+    @if (!Model.HasFullAccess)
+    {
+        <div class="empty-state mb-4">
+            <i class="fas fa-hourglass-half fs-4 text-warning"></i>
+            <p class="mb-0 mt-2">Access is limited until admin approval is completed.</p>
+        </div>
+    }
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="premium-card p-4">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: rgba(255, 208, 0, 0.15);">
+                            <i class="fas fa-building" style="color: var(--rc-yellow);"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="display-6 fw-bold">@Model.Listings.Count</div>
+                        <div class="text-muted">Listings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="premium-card p-4">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: rgba(255, 208, 0, 0.15);">
+                            <i class="fas fa-id-card" style="color: var(--rc-yellow);"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="display-6 fw-bold">@Model.Drivers.Count</div>
+                        <div class="text-muted">Drivers</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="premium-card p-4">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: rgba(255, 208, 0, 0.15);">
+                            <i class="fas fa-bullhorn" style="color: var(--rc-yellow);"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="display-6 fw-bold">@Model.Advertisements.Count</div>
+                        <div class="text-muted">Ads</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.RecentPayments != null && Model.RecentPayments.Any())
+    {
+        <div class="premium-card p-4 mb-4">
+            <h5 class="fw-bold mb-3">Recent Payments</h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Receipt #</th>
+                            <th>Transaction ID</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var payment in Model.RecentPayments)
+                        {
+                            <tr>
+                                <td><span class="badge bg-secondary">@payment.ReceiptNumber</span></td>
+                                <td><small>@payment.TransactionId</small></td>
+                                <td class="fw-bold">@payment.Amount.ToString("C")</td>
+                                <td>@payment.PaymentMethod</td>
+                                <td>@payment.PaymentDate.ToString("dd MMM yyyy")</td>
+                                <td>
+                                    @if (payment.Status == "Paid")
+                                    {
+                                        <span class="badge bg-success">Paid</span>
+                                    }
+                                    else if (payment.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info">@payment.Status</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+    @if (Model.HasFullAccess || Model.Listings.Any() || Model.Drivers.Any() || Model.Advertisements.Any())
+    {
+        <div class="row g-4">
+            <!-- Listings Management -->
+            <div class="col-lg-6">
+                <div class="premium-card p-4 h-100">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-building text-warning me-2"></i>Listing Registrations</h5>
+                    @if (Model.Listings.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Company</th>
+                                        <th>Approval</th>
+                                        <th>Payment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Listings)
+                                    {
+                                        <tr>
+                                            <td class="fw-bold">@item.Name</td>
+                                            <td><span class="badge @(item.Status=="Approved"?"bg-success":item.Status=="Rejected"?"bg-danger":"bg-warning text-dark")">@item.Status</span></td>
+                                            <td>
+                                                @if (item.PaymentStatus == "Paid")
+                                                {
+                                                    <span class="badge bg-success me-2">Paid</span>
+                                                    <a asp-action="MakePayment" asp-controller="Payment" asp-route-entityType="Listing" asp-route-entityId="@item.ListingId" class="btn btn-outline-dark btn-xs" style="font-size: 0.65rem; padding: 1px 5px;"><i class="fas fa-sync me-1"></i>Renew</a>
+                                                }
+                                                else
+                                                {
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <span class="badge bg-warning text-dark">Pending</span>
+                                                        <a asp-action="MakePayment" asp-controller="Payment" asp-route-entityType="Listing" asp-route-entityId="@item.ListingId" class="btn btn-warning btn-sm fw-semibold" style="font-size: 0.7rem; padding: 2px 6px;"><i class="fas fa-wallet me-1"></i>Pay</a>
+                                                    </div>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state py-4"><p class="text-muted mb-0 small">No active listings registered yet.</p></div>
+                    }
+                </div>
+            </div>
+
+            <!-- Drivers Management -->
+            <div class="col-lg-6">
+                <div class="premium-card p-4 h-100">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-id-card text-warning me-2"></i>Driver Registrations</h5>
+                    @if (Model.Drivers.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Driver</th>
+                                        <th>Approval</th>
+                                        <th>Payment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Drivers)
+                                    {
+                                        <tr>
+                                            <td class="fw-bold">@item.Name</td>
+                                            <td><span class="badge @(item.Status=="Approved"?"bg-success":item.Status=="Rejected"?"bg-danger":"bg-warning text-dark")">@item.Status</span></td>
+                                            <td>
+                                                @if (item.PaymentStatus == "Paid")
+                                                {
+                                                    <span class="badge bg-success me-2">Paid</span>
+                                                    <a asp-action="MakePayment" asp-controller="Payment" asp-route-entityType="Driver" asp-route-entityId="@item.DriverId" class="btn btn-outline-dark btn-xs" style="font-size: 0.65rem; padding: 1px 5px;"><i class="fas fa-sync me-1"></i>Renew</a>
+                                                }
+                                                else
+                                                {
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <span class="badge bg-warning text-dark">Pending</span>
+                                                        <a asp-action="MakePayment" asp-controller="Payment" asp-route-entityType="Driver" asp-route-entityId="@item.DriverId" class="btn btn-warning btn-sm fw-semibold" style="font-size: 0.7rem; padding: 2px 6px;"><i class="fas fa-wallet me-1"></i>Pay</a>
+                                                    </div>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state py-4"><p class="text-muted mb-0 small">No driver profiles registered yet.</p></div>
+                    }
+                </div>
+            </div>
+
+            <!-- Advertisements Management -->
+            @if (Model.Advertisements.Any())
+            {
+                <div class="col-12 mt-3">
+                    <div class="premium-card p-4">
+                        <h5 class="fw-bold mb-3"><i class="fas fa-bullhorn text-warning me-2"></i>Advertisement Campaigns</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Campaign</th>
+                                        <th>City</th>
+                                        <th>Term</th>
+                                        <th>Fee</th>
+                                        <th>Status</th>
+                                        <th>Payment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Advertisements)
+                                    {
+                                        <tr>
+                                            <td class="fw-bold">@item.Name</td>
+                                            <td>@item.City</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>$@item.PaymentAmount</td>
+                                            <td><span class="badge @(item.Status=="Approved"?"bg-success":item.Status=="Rejected"?"bg-danger":"bg-warning text-dark")">@item.Status</span></td>
+                                            <td>
+                                                @if (item.PaymentStatus == "Paid")
+                                                {
+                                                    <span class="badge bg-success">Paid</span>
+                                                }
+                                                else
+                                                {
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <span class="badge bg-warning text-dark">Pending</span>
+                                                        <a asp-action="MakePayment" asp-controller="Payment" asp-route-entityType="Advertisement" asp-route-entityId="@item.AdvertiseId" class="btn btn-warning btn-sm fw-semibold" style="font-size: 0.7rem; padding: 2px 6px;"><i class="fas fa-wallet me-1"></i>Pay Now</a>
+                                                    </div>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

@@ -1,0 +1,50 @@
+@model Radiocab.Models.Advertise
+@{
+    ViewData["Title"] = "Advertise";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="hero-dark mb-4">
+    <h2 class="fw-bold mb-2">Advertise your brand on <span class="text-warning">RadioCabs</span></h2>
+    <p class="text-light-emphasis mb-0">Reach trusted riders, companies and drivers with high visibility campaigns.</p>
+</section>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card p-4">
+            <h4 class="fw-bold mb-3">Advertisement Request Form</h4>
+            <form asp-action="AddAdvertise" asp-controller="MyController1" method="post" enctype="multipart/form-data" class="row g-3">
+                <div class="col-md-6"><label class="form-label">Company Name</label><input asp-for="Name" class="form-control" required /></div>
+                <div class="col-md-6"><label class="form-label">Designation</label><input asp-for="Designation" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Mobile</label><input asp-for="Mobile" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Telephone</label><input asp-for="Telephone" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Email</label><input asp-for="Email" class="form-control" required /></div>
+                <div class="col-md-6"><label class="form-label">City</label><input asp-for="City" class="form-control" required /></div>
+                <div class="col-md-6"><label class="form-label">Fax</label><input asp-for="FaxNumber" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Payment Type</label><select asp-for="PaymentType" class="form-select" id="advertisePaymentType"><option value="Monthly">Monthly</option><option value="Quarterly">Quarterly</option></select></div>
+                <div class="col-12"><small class="text-muted">Advertisement Amount: <strong id="advertiseAmount">$15</strong></small></div>
+                <div class="col-12"><label class="form-label">Address</label><input asp-for="Address" class="form-control" /></div>
+                <div class="col-12"><label class="form-label">Upload Ad Banner/Image</label><input type="file" name="BannerFile" class="form-control" accept="image/*" /></div>
+                <div class="col-12"><label class="form-label">Description</label><textarea asp-for="Description" class="form-control" rows="4" required></textarea></div>
+                <div class="col-12 d-flex gap-2"><button class="btn btn-warning">Submit Request</button><button type="reset" class="btn btn-dark">Reset</button></div>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card p-4 h-100">
+            <h5 class="fw-bold mb-3">Why choose RadioCabs Advertising?</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><i class="fa fa-check text-warning me-2"></i>Premium black-yellow brand visibility</li>
+                <li class="list-group-item"><i class="fa fa-check text-warning me-2"></i>Targeted audience in major cities</li>
+                <li class="list-group-item"><i class="fa fa-check text-warning me-2"></i>Flexible monthly & quarterly plans</li>
+                <li class="list-group-item"><i class="fa fa-check text-warning me-2"></i>Fast approval and support</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+const adPrices={Monthly:15,Quarterly:40};const adSelect=document.getElementById("advertisePaymentType");const adAmount=document.getElementById("advertiseAmount");if(adSelect&&adAmount){const updateAdAmount=()=>adAmount.textContent=`$${adPrices[adSelect.value]??0}`;adSelect.addEventListener("change",updateAdAmount);updateAdAmount();}
+</script>
+}

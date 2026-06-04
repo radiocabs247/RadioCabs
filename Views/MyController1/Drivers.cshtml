@@ -1,0 +1,222 @@
+@model Radiocab.Models.DriverViewModel
+
+@{
+    ViewData["Title"] = "Drivers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    // Retrieve query parameters if redirecting from quick search
+    var defaultSearch = Context.Request.Query["search"].ToString();
+}
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="card p-4 shadow-sm border-0 bg-white">
+            <h4 class="fw-bold mb-3 text-dark"><i class="fas fa-id-card text-warning me-2"></i>Driver Registration</h4>
+            <form asp-action="Drivers" asp-controller="MyController1" method="post" class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small text-secondary">Driver Name</label>
+                    <input asp-for="NewDriver.Name" class="form-control" placeholder="FullName" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small text-secondary">Driver ID Code (Unique)</label>
+                    <input asp-for="NewDriver.DriverCode" class="form-control" placeholder="e.g. DRV505" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small text-secondary">Password</label>
+                    <input asp-for="NewDriver.Password" type="password" class="form-control" placeholder="Min 6 characters" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small text-secondary">Emergency Contact Person</label>
+                    <input asp-for="NewDriver.ContactPerson" class="form-control" placeholder="e.g. Spouse/Parent" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small text-secondary">Location City</label>
+                    <input asp-for="NewDriver.City" class="form-control" placeholder="e.g. Pune" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small text-secondary">Mobile Number</label>
+                    <input asp-for="NewDriver.Mobile" class="form-control" placeholder="10-digit number" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small text-secondary">Alternative Phone</label>
+                    <input asp-for="NewDriver.Telephone" class="form-control" placeholder="Landline/Home" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small text-secondary">Email Address</label>
+                    <input asp-for="NewDriver.Email" type="email" class="form-control" placeholder="e.g. driver@email.com" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small text-secondary">Years of Experience</label>
+                    <input asp-for="NewDriver.Experience" type="number" min="0" max="50" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small text-secondary">Payment Term</label>
+                    <select asp-for="NewDriver.PaymentType" class="form-select" id="NewDriver_PaymentType" required>
+                        <option value="Monthly" selected>Monthly</option>
+                        <option value="Quarterly">Quarterly</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <div class="p-3 bg-light rounded-3 border-start border-5 border-warning mb-2">
+                        <small class="text-secondary d-block uppercase fw-bold" style="font-size: 0.75rem;">Calculated Driver Registration Fee:</small>
+                        <strong class="fs-4 text-dark" id="driverAmount">$10</strong>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold small text-secondary">Residential Address</label>
+                    <input asp-for="NewDriver.Address" class="form-control" placeholder="Physical Home Address" required />
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold small text-secondary">Brief Description</label>
+                    <textarea asp-for="NewDriver.Description" class="form-control" rows="3" placeholder="Describe routes familiar with, licenses held..."></textarea>
+                </div>
+                <div class="col-12 d-flex gap-2 mt-3">
+                    <button class="btn btn-warning w-100 fw-semibold">Submit Profile</button>
+                    <button type="reset" class="btn btn-dark w-100" onclick="setTimeout(updatePrice, 50)">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="card p-4 shadow-sm border-0 bg-white">
+            <h4 class="fw-bold mb-3 text-dark"><i class="fas fa-search text-warning me-2"></i>Search Drivers</h4>
+            
+            <div class="row g-3 bg-light p-3 rounded-4 mb-4">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold small text-secondary mb-1">Driver Name</label>
+                    <input type="text" id="searchDriverName" class="form-control" placeholder="Search by name..." onkeyup="filterDrivers()">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold small text-secondary mb-1">Location City</label>
+                    <input type="text" id="searchDriverCity" class="form-control" placeholder="Search by city..." onkeyup="filterDrivers()" value="@defaultSearch">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold small text-secondary mb-1">Min Experience (Yrs)</label>
+                    <input type="number" id="searchDriverExp" min="0" class="form-control" placeholder="e.g. 5" onkeyup="filterDrivers()" onchange="filterDrivers()">
+                </div>
+            </div>
+
+            <div class="row g-3" id="driverList">
+                @if (Model.AllDrivers != null && Model.AllDrivers.Any())
+                {
+                    foreach (var d in Model.AllDrivers)
+                    {
+                        var isApproved = d.Status == "Approved";
+                        <div class="col-md-12 driver-item" data-name="@d.Name.ToLower()" data-city="@d.City.ToLower()" data-experience="@d.Experience">
+                            <div class="border rounded-4 p-3 bg-white hover-lift">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle bg-dark text-warning d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; font-size: 1.25rem;">
+                                            @if (!string.IsNullOrEmpty(d.PhotoPath))
+                                            {
+                                                <img src="@d.PhotoPath" alt="@d.Name" class="w-100 h-100 rounded-circle object-fit-cover">
+                                            }
+                                            else
+                                            {
+                                                <i class="fas fa-user-circle"></i>
+                                            }
+                                        </div>
+                                        <div>
+                                            <h5 class="fw-bold mb-1">@d.Name</h5>
+                                            <span class="badge bg-warning text-dark me-2">@d.Experience Yrs Exp</span>
+                                            <small class="text-secondary"><i class="fas fa-map-marker-alt text-danger me-1"></i>@d.City</small>
+                                        </div>
+                                    </div>
+                                    <span class="badge @(isApproved ? "bg-success" : d.Status == "Rejected" ? "bg-danger" : "bg-warning text-dark")">
+                                        @d.Status
+                                    </span>
+                                </div>
+                                <div class="mt-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                    <div class="text-muted small">
+                                        <span><i class="fas fa-mobile-alt me-1 text-warning"></i>Mobile: <strong>@d.Mobile</strong></span>
+                                        <span class="ms-3"><i class="fas fa-id-badge me-1 text-warning"></i>ID: @d.DriverCode</span>
+                                    </div>
+                                    <button class="btn btn-dark btn-sm fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#drv-@d.DriverId">
+                                        <i class="fas fa-chevron-down me-1"></i>View Profile
+                                    </button>
+                                </div>
+                                
+                                <div class="collapse" id="drv-@d.DriverId">
+                                    <div class="bg-light p-3 rounded-3 small mt-3 border-start border-3 border-dark">
+                                        <div class="row g-2">
+                                            <div class="col-md-6"><strong>Driver ID:</strong> @d.DriverCode</div>
+                                            <div class="col-md-6"><strong>Location City:</strong> @d.City</div>
+                                            <div class="col-md-6"><strong>Emergency Contact:</strong> @d.ContactPerson</div>
+                                            <div class="col-md-6"><strong>Mobile Number:</strong> @d.Mobile</div>
+                                            <div class="col-md-6"><strong>Telephone:</strong> @d.Telephone</div>
+                                            <div class="col-md-6"><strong>Email Address:</strong> @d.Email</div>
+                                            <div class="col-12"><strong>Residential Address:</strong> @d.Address</div>
+                                            <div class="col-12"><strong>Description:</strong> @(string.IsNullOrEmpty(d.Description) ? "No detailed bio provided." : d.Description)</div>
+                                            <div class="col-12 mt-2">
+                                                <span class="badge bg-light text-dark border"><i class="fas fa-calendar me-1"></i>Term: @d.PaymentType</span>
+                                                <span class="badge bg-light text-dark border ms-2"><i class="fas fa-wallet me-1"></i>Amount: $@d.PaymentAmount</span>
+                                                <span class="badge bg-light text-dark border ms-2"><i class="fas fa-credit-card me-1"></i>Payment: @d.PaymentStatus</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12">
+                        <div class="empty-state py-5">
+                            <i class="fa fa-id-card fs-3 text-muted mb-2"></i>
+                            <p class="mb-0 text-muted">No drivers registered yet.</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    const prices = { Monthly: 10, Quarterly: 25 };
+    const paymentSelect = document.getElementById("NewDriver_PaymentType");
+    const amountTag = document.getElementById("driverAmount");
+
+    function updatePrice() {
+        if (paymentSelect && amountTag) {
+            const pVal = paymentSelect.value;
+            const fee = prices[pVal] ?? 0;
+            amountTag.textContent = `$${fee}`;
+        }
+    }
+
+    if (paymentSelect) {
+        paymentSelect.addEventListener("change", updatePrice);
+        updatePrice();
+    }
+
+    function filterDrivers() {
+        const nameVal = document.getElementById("searchDriverName").value.toLowerCase();
+        const cityVal = document.getElementById("searchDriverCity").value.toLowerCase();
+        const expVal = parseInt(document.getElementById("searchDriverExp").value) || 0;
+
+        document.querySelectorAll(".driver-item").forEach(item => {
+            const name = item.getAttribute("data-name");
+            const city = item.getAttribute("data-city");
+            const exp = parseInt(item.getAttribute("data-experience")) || 0;
+
+            const matchesName = !nameVal || name.includes(nameVal);
+            const matchesCity = !cityVal || city.includes(cityVal);
+            const matchesExp = exp >= expVal;
+
+            if (matchesName && matchesCity && matchesExp) {
+                item.style.setProperty("display", "block", "important");
+            } else {
+                item.style.setProperty("display", "none", "important");
+            }
+        });
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+        filterDrivers();
+    });
+</script>
+<partial name="_ValidationScriptsPartial" />
+}

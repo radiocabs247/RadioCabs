@@ -1,0 +1,118 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card overflow-hidden">
+            <div class="row g-0">
+                <div class="col-lg-5 hero-dark d-flex align-items-center">
+                    <div>
+                        <h2 class="fw-bold">Welcome to <span class="text-warning">RadioCabs</span></h2>
+                        <p class="text-light-emphasis">Login as Admin or Registered Unit and manage your transport business.</p>
+                    </div>
+                </div>
+                <div class="col-lg-7 p-4 p-md-5">
+                    <ul class="nav nav-pills mb-3" id="authTab">
+                        <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#loginPanel">Login</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#registerPanel">Register</button></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="loginPanel">
+                            <form id="loginForm" class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label">Login Type</label>
+                                    <select id="loginType" class="form-select" required>
+                                        <option value="RegisteredUnit">Registered Unit</option>
+                                        <option value="Admin">Admin</option>
+                                    </select>
+                                </div>
+                                <div class="col-12"><label class="form-label">Email</label><input type="email" id="loginEmail" class="form-control" required></div>
+                                <div class="col-12"><label class="form-label">Password</label><input type="password" id="loginPassword" class="form-control" required></div>
+                                <div class="col-12 text-end"><a asp-action="ForgotPassword" class="text-decoration-none small">Forgot Password?</a></div>
+                                <div class="col-12"><button type="submit" class="btn btn-warning w-100 fw-semibold">Login</button></div>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="registerPanel">
+                            <form id="registerForm" class="row g-3">
+                                <div class="col-md-6"><label class="form-label">Full Name</label><input type="text" id="regName" class="form-control" required></div>
+                                <div class="col-md-6"><label class="form-label">Email</label><input type="email" id="regEmail" class="form-control" required></div>
+                                <div class="col-md-6"><label class="form-label">Password</label><input type="password" id="regPassword" class="form-control" required></div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Unit Type</label>
+                                    <select id="regUnitType" class="form-select" required>
+                                        <option value="Listing">Listing Unit</option>
+                                        <option value="Driver">Driver Unit</option>
+                                        <option value="Advertise">Advertise Unit</option>
+                                    </select>
+                                </div>
+                                <div class="col-12"><button type="submit" class="btn btn-dark w-100">Create Account</button></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("regName").value.trim();
+            const email = document.getElementById("regEmail").value.trim();
+            const password = document.getElementById("regPassword").value.trim();
+            const unitType = document.getElementById("regUnitType").value;
+
+            if (!name || !email || !password) {
+                alert("Please fill all fields!");
+                return;
+            }
+
+            const res = await fetch("/MyController1/Register", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `Name=${encodeURIComponent(name)}&Email=${encodeURIComponent(email)}&Password=${encodeURIComponent(password)}&UnitType=${encodeURIComponent(unitType)}`
+            });
+
+            const text = await res.text();
+            if (text.includes("already registered")) {
+                alert("This email is already registered.");
+            } else {
+                alert("Registration successful! You can now login.");
+            }
+        });
+
+        document.getElementById("loginForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById("loginEmail").value.trim();
+            const password = document.getElementById("loginPassword").value.trim();
+            const loginType = document.getElementById("loginType").value;
+
+            if (!email || !password) {
+                alert("Please fill both fields!");
+                return;
+            }
+
+            const res = await fetch("/MyController1/Login", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `Email=${encodeURIComponent(email)}&Password=${encodeURIComponent(password)}&LoginType=${encodeURIComponent(loginType)}`
+            });
+
+            const text = await res.text();
+            if (text.includes("Invalid")) {
+                alert("Invalid email or password!");
+            } else if (text.includes("AdminSuccess")) {
+                window.location.href = "/Admin/Index";
+            } else {
+                window.location.href = "/MyController1/UnitDashboard";
+            }
+        });
+    </script>
+}

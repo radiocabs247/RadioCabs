@@ -1,0 +1,262 @@
+﻿@{
+    ViewData["Title"] = "Services";
+    Layout = "_Layout";
+}
+
+<!-- Hero Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">Our Services</h1>
+                <p class="lead mb-4 opacity-75">Find trusted taxi operators, drivers, and premium features with RadioCabs. Connect with verified professionals across Pakistan.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Search & Filters -->
+<section class="py-4">
+    <div class="container">
+        <div class="glass-dark p-4 rounded-4">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" placeholder="Search city, driver, or service...">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select">
+                        <option>All Memberships</option>
+                        <option>Premium</option>
+                        <option>Basic</option>
+                        <option>Free</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select">
+                        <option>All Service Types</option>
+                        <option>Company</option>
+                        <option>Driver</option>
+                        <option>Advertisement</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Cards -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="premium-card p-4 h-100 hover-lift">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; background: rgba(255, 208, 0, 0.15);">
+                            <i class="fas fa-building fs-4" style="color: var(--rc-yellow);"></i>
+                        </div>
+                        <h4 class="mb-0">Company Listings</h4>
+                    </div>
+                    <p class="text-muted mb-3">Search city-wise taxi operators with complete details, membership badges, and fleet information.</p>
+                    <a asp-action="Listing" asp-controller="MyController1" class="btn btn-outline-warning btn-sm">Explore Companies</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="premium-card p-4 h-100 hover-lift">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; background: rgba(255, 208, 0, 0.15);">
+                            <i class="fas fa-id-card fs-4" style="color: var(--rc-yellow);"></i>
+                        </div>
+                        <h4 class="mb-0">Driver Directory</h4>
+                    </div>
+                    <p class="text-muted mb-3">Find verified drivers by city, experience, and vehicle type. Connect directly with professionals.</p>
+                    <a asp-action="Drivers" asp-controller="MyController1" class="btn btn-outline-warning btn-sm">Find Drivers</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="premium-card p-4 h-100 hover-lift">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; background: rgba(255, 208, 0, 0.15);">
+                            <i class="fas fa-bullhorn fs-4" style="color: var(--rc-yellow);"></i>
+                        </div>
+                        <h4 class="mb-0">Advertising</h4>
+                    </div>
+                    <p class="text-muted mb-3">Promote your services with impactful ads across RadioCabs. Reach thousands of potential customers.</p>
+                    <a asp-action="Advertise" asp-controller="MyController1" class="btn btn-outline-warning btn-sm">Advertise Now</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="premium-card p-4 h-100 hover-lift">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; background: rgba(255, 208, 0, 0.15);">
+                            <i class="fas fa-crown fs-4" style="color: var(--rc-yellow);"></i>
+                        </div>
+                        <h4 class="mb-0">Membership Plans</h4>
+                    </div>
+                    <p class="text-muted mb-3">Choose Free, Basic, or Premium plans for more visibility and priority in search results.</p>
+                    <a asp-action="Listing" asp-controller="MyController1" class="btn btn-outline-warning btn-sm">View Plans</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="premium-card p-4 h-100 hover-lift">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; background: rgba(255, 208, 0, 0.15);">
+                            <i class="fas fa-credit-card fs-4" style="color: var(--rc-yellow);"></i>
+                        </div>
+                        <h4 class="mb-0">Payments & Billing</h4>
+                    </div>
+                    <p class="text-muted mb-3">Pay online securely and track invoices for your company or drivers. Multiple payment options available.</p>
+                    <a asp-action="PaymentHistory" asp-controller="Payment" class="btn btn-outline-warning btn-sm">View Payments</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="premium-card p-4 h-100 hover-lift">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; background: rgba(255, 208, 0, 0.15);">
+                            <i class="fas fa-headset fs-4" style="color: var(--rc-yellow);"></i>
+                        </div>
+                        <h4 class="mb-0">Feedback & Support</h4>
+                    </div>
+                    <p class="text-muted mb-3">Send complaints, suggestions, or compliments easily. Our support team responds promptly.</p>
+                    <a asp-action="Feedback" asp-controller="MyController1" class="btn btn-outline-warning btn-sm">Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Table -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="fw-bold mb-4 text-center">Membership Pricing</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="premium-card p-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Monthly</th>
+                                    <th>Quarterly</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Company Registration</strong></td>
+                                    <td class="fw-bold">$15</td>
+                                    <td class="fw-bold">$40</td>
+                                    <td><a asp-action="Listing" asp-controller="MyController1" class="btn btn-sm btn-warning">Register</a></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Driver Registration</strong></td>
+                                    <td class="fw-bold">$10</td>
+                                    <td class="fw-bold">$25</td>
+                                    <td><a asp-action="Drivers" asp-controller="MyController1" class="btn btn-sm btn-warning">Register</a></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Advertisement</strong></td>
+                                    <td class="fw-bold">$15</td>
+                                    <td class="fw-bold">$40</td>
+                                    <td><a asp-action="Advertise" asp-controller="MyController1" class="btn btn-sm btn-warning">Advertise</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold mb-3">How RadioCabs Works</h2>
+            <p class="text-muted">Simple flows for riders, companies and drivers — get registered, verified, paid and connected.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="premium-card p-4 h-100">
+                    <div class="text-center mb-4">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px; background: rgba(255, 208, 0, 0.15);">
+                            <i class="fas fa-user fs-2" style="color: var(--rc-yellow);"></i>
+                        </div>
+                        <h4 class="fw-bold">For Riders</h4>
+                    </div>
+                    <ol class="mb-0">
+                        <li class="mb-2"><strong>Search:</strong> Find companies or drivers by city or service.</li>
+                        <li class="mb-2"><strong>Compare:</strong> Check membership badges, fleet & contact info.</li>
+                        <li class="mb-2"><strong>Contact/Book:</strong> Call or message to arrange your ride.</li>
+                        <li><strong>Feedback:</strong> Leave ratings and suggestions.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="premium-card p-4 h-100">
+                    <div class="text-center mb-4">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px; background: rgba(255, 208, 0, 0.15);">
+                            <i class="fas fa-building fs-2" style="color: var(--rc-yellow);"></i>
+                        </div>
+                        <h4 class="fw-bold">For Companies</h4>
+                    </div>
+                    <ol class="mb-0">
+                        <li class="mb-2"><strong>Sign up:</strong> Register company details and documents.</li>
+                        <li class="mb-2"><strong>Verify:</strong> Admin reviews and confirms the listing.</li>
+                        <li class="mb-2"><strong>Choose Plan:</strong> Pick Free/Basic/Premium and pay online.</li>
+                        <li><strong>Manage:</strong> Add drivers, update fleet, view invoices.</li>
+                    </ol>
+                    <div class="text-center mt-3">
+                        <a asp-action="Listing" asp-controller="MyController1" class="btn btn-warning btn-sm">Register Company</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="premium-card p-4 h-100">
+                    <div class="text-center mb-4">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px; background: rgba(255, 208, 0, 0.15);">
+                            <i class="fas fa-id-card fs-2" style="color: var(--rc-yellow);"></i>
+                        </div>
+                        <h4 class="fw-bold">For Drivers</h4>
+                    </div>
+                    <ol class="mb-0">
+                        <li class="mb-2"><strong>Create Profile:</strong> Add name, license, vehicle details & experience.</li>
+                        <li class="mb-2"><strong>Upload Docs:</strong> License, ID, vehicle papers for verification.</li>
+                        <li class="mb-2"><strong>Get Verified:</strong> Admin checks and approves your profile.</li>
+                        <li><strong>Get Booked:</strong> Companies or customers can contact you directly.</li>
+                    </ol>
+                    <div class="text-center mt-3">
+                        <a asp-action="Drivers" asp-controller="MyController1" class="btn btn-warning btn-sm">Register Driver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold mb-3">Our Presence Across Pakistan</h2>
+            <p class="text-muted">We are available nationwide — from Pakistan.</p>
+        </div>
+        <div class="premium-card p-2">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d115744.16500323702!2d67.0564352!3d24.965939199999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e0!4m3!3m2!1d24.9751205!2d67.09179739999999!4m5!1s0x3eb33e6b1566c46f%3A0x65318f4eb62c7aa8!2sAptech%20Learning%20Garden%20Center%2C%20APWA%20Complex%2C%201st%20Floor%2C%20Agha%20Khan%203%20Rd%2C%20Garden%20East%20Saddar%20Town%2C%20Karachi%2C%2074400%2C%20Pakistan!3m2!1d24.867175!2d67.024241!5e0!3m2!1sen!2s!4v1780558466756!5m2!1sen!2s"
+                height="400"
+                style="width: 100%; border:0; border-radius:8px;"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+</section>

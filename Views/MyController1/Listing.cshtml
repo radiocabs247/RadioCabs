@@ -1,0 +1,77 @@
+@model Radiocab.Models.ListingViewModel
+
+@{
+    ViewData["Title"] = "Listing";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row g-4" style="margin-top: 50px;">
+    <div class="col-lg-6">
+        <div class="card p-4">
+            <h4 class="fw-bold mb-3">Register Company Listing</h4>
+            <form asp-action="AddListing" asp-controller="MyController1" method="post" enctype="multipart/form-data" class="row g-3">
+                <div class="col-md-6"><label class="form-label">Company Name</label><input asp-for="NewListing.Name" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Company ID</label><input asp-for="NewListing.CompanyCode" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Password</label><input asp-for="NewListing.Password" type="password" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Contact Person</label><input asp-for="NewListing.ContactPerson" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Designation</label><input asp-for="NewListing.Designation" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">City</label><input asp-for="NewListing.City" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Mobile</label><input asp-for="NewListing.Mobile" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Telephone</label><input asp-for="NewListing.Telephone" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Fax</label><input asp-for="NewListing.Fax" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Email</label><input asp-for="NewListing.Email" class="form-control" /></div>
+                <div class="col-12"><label class="form-label">Address</label><input asp-for="NewListing.Address" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Membership Type</label><select asp-for="NewListing.MembershipType" class="form-select"><option>Free</option><option>Basic</option><option>Premium</option></select></div>
+                <div class="col-md-6"><label class="form-label">Payment Type</label><select asp-for="NewListing.PaymentType" class="form-select payment-type"><option value="Monthly">Monthly</option><option value="Quarterly">Quarterly</option></select></div>
+                <div class="col-12"><small class="text-muted">Registration Amount: <strong id="listingAmount">$15</strong></small></div>
+                <div class="col-12"><label class="form-label">Description</label><textarea asp-for="NewListing.Description" class="form-control"></textarea></div>
+                <div class="col-12"><label class="form-label">Logo/Picture</label><input type="file" name="ImageFile" class="form-control" accept="image/*" /></div>
+                <div class="col-12 d-flex gap-2"><button class="btn btn-warning">Submit</button><button type="reset" class="btn btn-dark">Reset</button></div>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold mb-0">Registered Companies</h4>
+                <input type="text" id="searchInput" class="form-control w-auto" placeholder="Search...">
+            </div>
+            <div class="row g-3" id="listingCards">
+                @if (Model.AllListings != null && Model.AllListings.Any())
+                {
+                    foreach (var listing in Model.AllListings)
+                    {
+                        <div class="col-12 listing-item">
+                            <div class="border rounded-4 p-3">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="mb-1">@listing.Name</h6>
+                                    <span class="badge @(listing.Status == "Approved" ? "bg-success" : listing.Status == "Rejected" ? "bg-danger" : "bg-warning text-dark")">@listing.Status</span>
+                                </div>
+                                <small class="text-muted d-block">@listing.City | @listing.CompanyCode</small>
+                                <small class="text-muted d-block">@listing.PaymentType - $@listing.PaymentAmount (@listing.PaymentStatus)</small>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12"><div class="empty-state"><i class="fa fa-building fs-4 text-warning"></i><p class="mb-0 mt-2">No listings found yet.</p></div></div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const listingPricing={Monthly:15,Quarterly:40};
+        const listingPaymentType=document.querySelector(".payment-type");
+        const listingAmount=document.getElementById("listingAmount");
+        if(listingPaymentType&&listingAmount){const u=()=>listingAmount.textContent=`$${listingPricing[listingPaymentType.value]??0}`;listingPaymentType.addEventListener("change",u);u();}
+        document.getElementById("searchInput")?.addEventListener("keyup",function(){const filter=this.value.toLowerCase();document.querySelectorAll(".listing-item").forEach(i=>{i.style.display=i.innerText.toLowerCase().includes(filter)?"block":"none";});});
+    </script>
+}
+
+
+
+

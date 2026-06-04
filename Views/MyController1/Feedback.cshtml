@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Feedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model Radiocab.Models.Feedback
+
+<section class="hero-dark mb-4">
+    <h2 class="fw-bold mb-2">Share your feedback with <span class="text-warning">RadioCabs</span></h2>
+    <p class="text-light-emphasis mb-0">Your suggestions and complaints help us improve service quality.</p>
+</section>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <form asp-action="AddFeedback" asp-controller="MyController1" method="post" class="row g-3">
+                @Html.AntiForgeryToken()
+                <div class="col-md-6"><label class="form-label">Name</label><input asp-for="Name" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Mobile</label><input asp-for="MobileNo" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">Email</label><input asp-for="Email" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">City</label><input asp-for="City" class="form-control" /></div>
+                <div class="col-12"><label class="form-label">Type</label><select asp-for="Type" class="form-select"><option>Complaint</option><option>Suggestion</option><option>Compliment</option></select></div>
+                <div class="col-12"><label class="form-label">Description</label><textarea asp-for="Description" class="form-control" rows="4"></textarea></div>
+                <div class="col-12 d-flex gap-2"><button class="btn btn-warning">Submit Feedback</button><button type="reset" class="btn btn-dark">Reset</button></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
