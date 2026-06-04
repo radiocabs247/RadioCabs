@@ -1,0 +1,527 @@
+/* =================================================================== */
+/* =================== ADMIN TEMPLATE STYLES ========================= */
+/* =================================================================== */
+
+/* Universal styles for the admin template */
+body.admin-template {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #1e3a8a 0%, #000000 100%);
+    min-height: 100vh;
+}
+
+.admin-template * {
+    box-sizing: border-box;
+}
+
+/* --- Main Layout --- */
+.admin-template .dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-template .main-content {
+    flex: 1;
+    margin-left: 280px;
+    padding: 2rem;
+}
+
+/* --- Sidebar Styles --- */
+.admin-template .sidebar {
+    width: 280px;
+    background: #000000;
+    border-right: 2px solid #1e3a8a;
+    box-shadow: 0 8px 32px rgba(30, 58, 138, 0.3);
+    padding: 2rem 0;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.admin-template .logo {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 0 2rem;
+}
+
+    .admin-template .logo h1 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 800;
+        font-size: 1.8rem;
+        color: #ffffff;
+        margin: 0;
+    }
+
+    .admin-template .logo p {
+        font-size: 0.9rem;
+        color: #1e3a8a;
+        margin: 0.5rem 0 0 0;
+        font-weight: 500;
+    }
+
+.admin-template .nav-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-template .nav-item {
+    margin: 0.5rem 1.5rem;
+}
+
+.admin-template .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    color: #ffffff;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+    .admin-template .nav-link:hover {
+        background: #1e3a8a;
+        color: white;
+        transform: translateX(5px);
+        box-shadow: 0 4px 15px rgba(30, 58, 138, 0.5);
+    }
+
+    .admin-template .nav-link.active {
+        background: #1e3a8a;
+        color: white;
+        box-shadow: 0 4px 15px rgba(30, 58, 138, 0.5);
+    }
+
+    .admin-template .nav-link i {
+        margin-right: 1rem;
+        font-size: 1.1rem;
+        width: 20px;
+        text-align: center;
+    }
+
+
+/* --- Header & Stats --- */
+.admin-template .header {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(30, 58, 138, 0.2);
+    border: 1px solid #1e3a8a;
+}
+
+    .admin-template .header h1 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: #1e3a8a;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .admin-template .header p {
+        color: #718096;
+        font-size: 1.1rem;
+        margin: 0;
+        font-weight: 400;
+    }
+
+.admin-template .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.admin-template .stat-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(30, 58, 138, 0.2);
+    border: 1px solid #1e3a8a;
+    transition: transform 0.3s ease;
+}
+
+    .admin-template .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .admin-template .stat-card h3 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        color: #4a5568;
+        margin: 0 0 0.5rem 0;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+.admin-template .stat-number {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: #1e3a8a;
+    margin: 0;
+}
+
+.admin-template .stat-icon {
+    float: right;
+    font-size: 2rem;
+    color: #1e3a8a;
+    opacity: 0.7;
+}
+
+
+/* --- General Content & Forms --- */
+.admin-template .content-section {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(30, 58, 138, 0.2);
+    border: 1px solid #1e3a8a;
+    margin-bottom: 2rem;
+}
+
+    .admin-template .content-section h2 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        color: #2d3748;
+        margin: 0 0 1.5rem 0;
+        font-size: 1.5rem;
+    }
+
+.admin-template .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+    .admin-template .form-group label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+    }
+
+    .admin-template .form-group input,
+    .admin-template .form-group select,
+    .admin-template .form-group textarea {
+        padding: 0.8rem 1rem;
+        border: 1px solid #cbd5e0;
+        border-radius: 10px;
+        font-size: 1rem;
+        outline: none;
+        transition: 0.3s;
+    }
+
+        .admin-template .form-group input:focus,
+        .admin-template .form-group select:focus,
+        .admin-template .form-group textarea:focus {
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.2);
+        }
+
+.admin-template .submit-btn {
+    background: #1e3a8a;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+    .admin-template .submit-btn:hover {
+        background: #000000;
+    }
+
+/* Specific Form Layouts */
+.admin-template .driver-form,
+.admin-template .company-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+    .admin-template .driver-form .submit-btn,
+    .admin-template .company-form .submit-btn {
+        grid-column: span 2;
+        justify-self: start;
+    }
+
+.admin-template .advertise-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+    .admin-template .advertise-form .submit-btn {
+        width: fit-content;
+    }
+
+.admin-template .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+/* --- Cards (Driver, Company, Feature) --- */
+.admin-template .driver-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.admin-template .driver-card {
+    display: flex;
+    background: #f8fafc;
+    border-radius: 15px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 1px solid #cbd5e0;
+    transition: 0.3s;
+}
+
+    .admin-template .driver-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(30, 58, 138, 0.25);
+    }
+
+.admin-template .driver-image {
+    flex: 0 0 120px;
+    height: 120px;
+    overflow: hidden;
+    border-right: 3px solid #1e3a8a;
+}
+
+    .admin-template .driver-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.admin-template .driver-info {
+    padding: 1rem;
+    flex: 1;
+}
+
+    .admin-template .driver-info h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1e3a8a;
+        margin-bottom: 0.5rem;
+    }
+
+    .admin-template .driver-info p {
+        font-size: 0.95rem;
+        color: #4a5568;
+        margin: 0.2rem 0;
+    }
+
+    .admin-template .driver-info strong {
+        color: #2d3748;
+    }
+
+.admin-template .company-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.admin-template .company-card {
+    background: #fff;
+    border: 1px solid #1e3a8a;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(30, 58, 138, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+    .admin-template .company-card:hover {
+        transform: translateY(-5px);
+    }
+
+.admin-template .company-logo img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid #1e3a8a;
+    object-fit: cover;
+    margin-bottom: 1rem;
+}
+
+.admin-template .company-details {
+    text-align: center;
+}
+
+    .admin-template .company-details h3 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        color: #1e3a8a;
+        margin-bottom: 0.5rem;
+    }
+
+    .admin-template .company-details p {
+        color: #4a5568;
+        margin: 0.3rem 0;
+        line-height: 1.4;
+        font-size: 0.95rem;
+    }
+
+.admin-template .company-desc {
+    color: #718096;
+    font-style: italic;
+    margin-top: 0.8rem;
+}
+
+.admin-template .card-actions {
+    margin-top: 1.2rem;
+    display: flex;
+    gap: 0.8rem;
+}
+
+.admin-template .edit-btn,
+.admin-template .delete-btn {
+    background: #1e3a8a;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+    .admin-template .edit-btn:hover {
+        background: #000000;
+    }
+
+.admin-template .delete-btn {
+    background: #dc2626;
+}
+
+    .admin-template .delete-btn:hover {
+        background: #b91c1c;
+    }
+
+.admin-template .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.admin-template .feature-card {
+    background: rgba(30, 58, 138, 0.05);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid rgba(30, 58, 138, 0.2);
+}
+
+    .admin-template .feature-card h4 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        color: #2d3748;
+        margin: 0 0 1rem 0;
+        font-size: 1.1rem;
+    }
+
+    .admin-template .feature-card p {
+        color: #718096;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+
+/* --- Footer --- */
+.admin-template .footer {
+    background: #000000;
+    border-top: 2px solid #1e3a8a;
+    padding: 2rem;
+    margin-top: 2rem;
+    color: #ffffff;
+}
+
+.admin-template .footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-template .footer-section h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+}
+
+.admin-template .footer-section p,
+.admin-template .footer-section li {
+    color: #cccccc;
+    line-height: 1.6;
+    margin: 0.5rem 0;
+}
+
+.admin-template .footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-template .footer-section a {
+    color: #cccccc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+    .admin-template .footer-section a:hover {
+        color: #1e3a8a;
+    }
+
+.admin-template .footer-bottom {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e3a8a;
+    color: #cccccc;
+}
+
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .admin-template .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .admin-template .main-content {
+        margin-left: 0;
+        padding: 1rem;
+    }
+
+    .admin-template .dashboard-container {
+        flex-direction: column;
+    }
+
+    .admin-template .header h1 {
+        font-size: 2rem;
+    }
+
+    .admin-template .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-template .content-section {
+        padding: 1.2rem;
+    }
+}
